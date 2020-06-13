@@ -46,7 +46,7 @@ iptables -t nat -A PREROUTING -i eth2 -p tcp -m tcp --dport 8080 -j DNAT --to-de
 
 ### Проверка
 
-1. Проверяю port-knocking
+1. Проверяю port-knocking (юзер и пароль vagrant)
 
 По дефолту:
 
