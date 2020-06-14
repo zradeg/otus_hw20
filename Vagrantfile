@@ -73,7 +73,6 @@ Vagrant.configure("2") do |config|
         when "inetRouter"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
             echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
-            echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
             sysctl -p /etc/sysctl.conf
 			iptables-restore < /vagrant/port_knocking-rules
 			yum install -y vim mc tcpdump traceroute net-tools
@@ -82,7 +81,6 @@ Vagrant.configure("2") do |config|
 		when "inetRouter2"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
             echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
-            echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
             sysctl -p /etc/sysctl.conf
             iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
 			iptables -A FORWARD -d 192.168.0.2/32 -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
@@ -93,7 +91,6 @@ Vagrant.configure("2") do |config|
         when "centralRouter"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
             echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
-            echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
             sysctl -p /etc/sysctl.conf
             echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
             echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
