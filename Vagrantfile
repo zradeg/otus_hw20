@@ -72,14 +72,18 @@ Vagrant.configure("2") do |config|
         case boxname.to_s
         when "inetRouter"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sysctl net.ipv4.conf.all.forwarding=1
+            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
+            echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
+            sysctl -p /etc/sysctl.conf
 			iptables-restore < /vagrant/port_knocking-rules
 			yum install -y vim mc tcpdump traceroute net-tools
 			ip route add 192.168.0.0/28 via 192.168.245.2 dev eth1
             SHELL
 		when "inetRouter2"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sysctl net.ipv4.conf.all.forwarding=1
+            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
+            echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
+            sysctl -p /etc/sysctl.conf
             iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
 			iptables -A FORWARD -d 192.168.0.2/32 -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
 			iptables -t nat -A PREROUTING -i eth2 -p tcp -m tcp --dport 8080 -j DNAT --to-destination 192.168.0.2:80
