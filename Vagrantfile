@@ -74,9 +74,9 @@ Vagrant.configure("2") do |config|
           box.vm.provision "shell", run: "always", inline: <<-SHELL
             echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.conf
             sysctl -p /etc/sysctl.conf
-			iptables-restore < /vagrant/port_knocking-rules
 			yum install -y vim mc tcpdump traceroute net-tools
-			ip route add 192.168.0.0/28 via 192.168.245.2 dev eth1
+			ip route add 192.168.0.0/28 via 192.168.255.2 dev eth1
+			iptables-restore < /vagrant/port_knocking-rules
             SHELL
 		when "inetRouter2"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
